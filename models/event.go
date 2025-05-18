@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/RevanthGovindan/event-booking/db"
@@ -29,7 +28,42 @@ func (e *Event) Save() error {
 	}
 	id, err := result.LastInsertId()
 	e.ID = id
-	fmt.Println("Inserted ID:", id)
+	return err
+}
+
+func (e *Event) Update() error {
+	query := `update events SET name =?,description=?,location=?,dateTime=? where id = ?`
+	statement, err := db.Db.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+	result, err := statement.Exec(e.Name, e.Description, e.Location, e.DateTime, e.ID)
+	if err != nil {
+		return err
+	}
+	count, err := result.RowsAffected()
+	if count > 0 {
+		return nil
+	}
+	return err
+}
+
+func (e Event) Delete() error {
+	query := `delete from events where id = ?`
+	statement, err := db.Db.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+	result, err := statement.Exec(e.ID)
+	if err != nil {
+		return err
+	}
+	count, err := result.RowsAffected()
+	if count > 0 {
+		return nil
+	}
 	return err
 }
 
