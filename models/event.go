@@ -67,6 +67,32 @@ func (e Event) Delete() error {
 	return err
 }
 
+func (e Event) Register(userId int64) error {
+	query := `INSERT INTO registrations(event_id,user_id) VALUES (?,?)`
+	stmt, err := db.Db.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+	_, err = stmt.Exec(e.ID, userId)
+	return err
+}
+
+func (e Event) CancelRegistration(userId int64) error {
+	query := `DELETE FROM registrations where event_id=? and user_id=?`
+	stmt, err := db.Db.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+	_, err = stmt.Exec(e.ID, userId)
+	return err
+}
+
 func GetAllEvents() ([]Event, error) {
 	var result []Event = make([]Event, 0)
 	query := `select * from events`

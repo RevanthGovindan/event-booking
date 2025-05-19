@@ -60,7 +60,7 @@ func updateEvent(context *gin.Context) {
 		return
 	}
 	if event.UserID != userId {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "not authorized"})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "not authorized to update event"})
 		return
 	}
 
@@ -96,7 +96,7 @@ func deleteEvent(context *gin.Context) {
 		return
 	}
 	if event.UserID != userId {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "not authorized"})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "not authorized to delete event"})
 		return
 	}
 
