@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -17,7 +16,6 @@ func createEvent(context *gin.Context) {
 	}
 	event.ID = 1
 	event.UserID = 1
-	fmt.Println(event)
 	err = event.Save()
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
